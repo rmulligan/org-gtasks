@@ -365,13 +365,14 @@
 
 ;; push
 (defun org-gtasks-format-iso2org (str)
+  (setq str (replace-regexp-in-string ".000Z" "-0700" str))
   (format-time-string "%Y-%m-%d %a %H:%M" (date-to-time str)))
 
 (defun org-gtasks-format-org2iso (year mon day hour min)
   (let ((seconds (time-to-seconds (encode-time 0 (if min min 0) (if hour hour 0)
 					       day mon year))))
     (concat (format-time-string "%Y-%m-%dT%H:%M" (seconds-to-time seconds))
-	    ":00Z")))
+	    ":00-0700")))
 
 (defun org-gtasks-find-type (tasks id)
   (if (cl-find-if (lambda (task) (string= (plist-get task :id) id)) tasks)
